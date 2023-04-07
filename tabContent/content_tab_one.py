@@ -6,44 +6,13 @@ import pandas as pd
 from datetime import datetime
 from app import app
 import plotly.graph_objs as go
-import dash_daq as daq
 
-layout_tab_one = html.Div([
-
-    dcc.Interval(id='update_value1',
-                 interval=1 * 16000,
-                 n_intervals=0),
-
-    html.Div([
-        html.Div([
-            dcc.Graph(id='line_chart1',
-                      config={'displayModeBar': False}),
-            html.Div([
-                daq.BooleanSwitch(id='line_color',
-                                  on=True,
-                                  color="#9B51E0",
-                                  label='Line color',
-                                  labelPosition='top'
-                                  ),
-                daq.BooleanSwitch(id='last_values',
-                                  on=True,
-                                  color="#FF5E5E",
-                                  label='Select last values',
-                                  labelPosition='top'
-                                  )
-            ], className='button_row')
-        ], className='tab_page eight columns')
-
-    ], className='tab_content_row row')
-
-])
+dcc.Interval(id='update_value1',
+             interval=1 * 16000,
+             n_intervals=0),
 
 
-@app.callback(Output('line_chart1', 'figure'),
-              [Input('update_value1', 'n_intervals')],
-              [Input('line_color', 'on')],
-              [Input('last_values', 'on')])
-def update_value(n_intervals, line_color, last_values):
+def tab_one(n_intervals, line_color, last_values):
     url = 'https://api.thingspeak.com/channels/2007583/fields/2.csv?results=50'
     df = pd.read_csv(url)
     df['created_at'] = pd.to_datetime(df['created_at'])

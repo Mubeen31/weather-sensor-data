@@ -8,24 +8,12 @@ from app import app
 import plotly.graph_objs as go
 import numpy as np
 
-layout_tab_three = html.Div([
-    dcc.Interval(id='update_value3',
-                 interval=1 * 16000,
-                 n_intervals=0),
-
-    html.Div([
-        html.Div([
-            dcc.Graph(id='line_chart3',
-                      config={'displayModeBar': False})
-        ], className='tab_page eight columns')
-
-    ], className='tab_content_row row')
-])
+dcc.Interval(id='update_value3',
+             interval=1 * 16000,
+             n_intervals=0),
 
 
-@app.callback(Output('line_chart3', 'figure'),
-              [Input('update_value3', 'n_intervals')])
-def update_value(n_intervals):
+def tab_three(n_intervals):
     url = 'https://api.thingspeak.com/channels/2007583/fields/2.csv?days=2'
     df = pd.read_csv(url)
     df['created_at'] = pd.to_datetime(df['created_at'])
@@ -60,20 +48,20 @@ def update_value(n_intervals):
 
         ),
             go.Scatter(
-            x=yesterday_hourly_values['Hour'],
-            y=yesterday_hourly_values['field2'],
-            name='Yesterday Average Temperature (°C)',
-            mode='markers+lines',
-            line=dict(width=3, color='rgb(214, 32, 32)'),
-            marker=dict(size=7, symbol='circle', color='rgb(214, 32, 32)',
-                        line=dict(width=2, color='rgb(214, 32, 32)')),
-            hoverinfo='text',
-            hovertext=
-            '<b>Date</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
-            '<b>Hour</b>: ' + yesterday_hourly_values['Hour'].astype(str) + '<br>' +
-            '<b>Temperature (°C)</b>: ' + [f'{x:.2f} °' for x in yesterday_hourly_values['field2']] + '<br>'
+                x=yesterday_hourly_values['Hour'],
+                y=yesterday_hourly_values['field2'],
+                name='Yesterday Average Temperature (°C)',
+                mode='markers+lines',
+                line=dict(width=3, color='rgb(214, 32, 32)'),
+                marker=dict(size=7, symbol='circle', color='rgb(214, 32, 32)',
+                            line=dict(width=2, color='rgb(214, 32, 32)')),
+                hoverinfo='text',
+                hovertext=
+                '<b>Date</b>: ' + yesterday_hourly_values['Date'].astype(str) + '<br>' +
+                '<b>Hour</b>: ' + yesterday_hourly_values['Hour'].astype(str) + '<br>' +
+                '<b>Temperature (°C)</b>: ' + [f'{x:.2f} °' for x in yesterday_hourly_values['field2']] + '<br>'
 
-        )],
+            )],
         'layout': go.Layout(
             margin=dict(t=50, l=50, r=40),
             hovermode='x',

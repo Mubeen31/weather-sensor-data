@@ -5,24 +5,12 @@ import pandas as pd
 from app import app
 import plotly.graph_objs as go
 
-layout_tab_four = html.Div([
-    dcc.Interval(id='update_value4',
-                 interval=1 * 16000,
-                 n_intervals=0),
-
-    html.Div([
-        html.Div([
-            dcc.Graph(id='line_chart4',
-                      config={'displayModeBar': False})
-        ], className='tab_page eight columns')
-
-    ], className='tab_content_row row')
-])
+dcc.Interval(id='update_value4',
+             interval=1 * 16000,
+             n_intervals=0),
 
 
-@app.callback(Output('line_chart4', 'figure'),
-              [Input('update_value4', 'n_intervals')])
-def update_value(n_intervals):
+def tab_four(n_intervals):
     url = 'https://api.thingspeak.com/channels/2007583/fields/3.csv?days=1'
     df = pd.read_csv(url)
     df['created_at'] = pd.to_datetime(df['created_at'])
@@ -74,13 +62,13 @@ def update_value(n_intervals):
                               color='#666666')
             ),
             yaxis=dict(
-                       zeroline=False,
-                       showline=False,
-                       showgrid=True,
-                       gridcolor='#e6e6e6',
-                       tickfont=dict(family='Arial',
-                                     size=12,
-                                     color='#666666')
-                       ),
+                zeroline=False,
+                showline=False,
+                showgrid=True,
+                gridcolor='#e6e6e6',
+                tickfont=dict(family='Arial',
+                              size=12,
+                              color='#666666')
+            ),
         )
     }

@@ -16,7 +16,6 @@ body {
   column-gap: 30px;
   flex-wrap: wrap;
 }
-
 .image {
   height: 25px;
 }
@@ -58,28 +57,82 @@ body {
   flex-direction: row;
   white-space: pre;
   background-color: #ffffff;
-  margin-top: 40px;
   border-bottom: 1px solid #e6e6e6;
+  width: 830px;
+  margin-top: 20px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
 }
 
 .display_center_row {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-left: 8px;
-  margin-right: 8px;
 }
 
 .tab_content_row  {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-left: 8px;
-  margin-right: 8px;
 }
 
 .tab_page {
+  border-top: 1px solid #e6e6e6;
+  width: 830px;
+}
+
+.card_bg {
+  display: flex;
+  justify-content: center;
   background-color: #ffffff;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  margin-left: 0;
+  margin-right: 0;
+  width: 200px;
+  border-top-right-radius: 15px;
+  border-bottom-left-radius: 15px;
+}
+
+.temp_humidity {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 20px;
+  row-gap: 10px;
+  column-gap: 10px;
+  white-space: pre;
+}
+
+.numeric_value {
+  font-weight: bold;
+  font-size: 35px;
+  margin-top: -25px;
+}
+
+.temp_image_row {
+  display: flex;
+  flex-direction: row;
+}
+
+.symbol {
+  color: #737373;
+  margin-bottom: 10px;
+}
+
+.temp_symbol_column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-top: -5px;
+}
+
+.text_dropdown_row {
+  display: flex;
+  flex-direction: row;
+  column-gap: 5px;
 }
 
 .button_row {

@@ -7,26 +7,12 @@ from datetime import datetime
 from app import app
 import plotly.graph_objs as go
 
-layout_tab_two = html.Div([
-
-    dcc.Interval(id='update_value2',
-                 interval=1 * 16000,
-                 n_intervals=0),
-
-    html.Div([
-        html.Div([
-            dcc.Graph(id='line_chart2',
-                      config={'displayModeBar': False})
-        ], className='tab_page eight columns')
-
-    ], className='tab_content_row row')
-
-])
+dcc.Interval(id='update_value2',
+             interval=1 * 16000,
+             n_intervals=0),
 
 
-@app.callback(Output('line_chart2', 'figure'),
-              [Input('update_value2', 'n_intervals')])
-def update_value(n_intervals):
+def tab_two(n_intervals):
     url = 'https://api.thingspeak.com/channels/2007583/fields/1.csv?results=50'
     df = pd.read_csv(url)
     df['created_at'] = pd.to_datetime(df['created_at'])
