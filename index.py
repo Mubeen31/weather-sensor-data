@@ -64,9 +64,15 @@ tab_two_chart = html.Div([
 ], className='tab_content_row')
 tab_three_chart = html.Div([
     html.Div([
-        dcc.Graph(id='line_chart3',
-                  config={'displayModeBar': False})
-    ], className='tab_page')
+        html.Div([
+            dcc.Graph(id='line_chart3',
+                      config={'displayModeBar': False})
+        ], className='tab_page'),
+        html.Img(id='tooltip_chart',
+                 n_clicks=0,
+                 src='/assets/tooltip.png',
+                 className='info_image'),
+    ], className='card_info_image'),
 ], className='tab_content_row')
 tab_four_chart = html.Div([
     html.Div([
@@ -164,14 +170,19 @@ app.layout = html.Div([
     # Modal temperature
     dbc.Modal([
         dbc.ModalBody(
-            html.P(dcc.Markdown('''
+            html.Div([
+                html.P(dcc.Markdown('''
             As the DHT 22 sensor is inside the plastic container and hanged outside the window, this saves 
             the sensor from external weather factor but the plastic container acts like a **greenhouse.** 
             Despite the holes on the bottom side of the plastic container, some heat remains trapped 
-            inside, causing the high temperature. As a result of external factors, this card shows 
+            inside, causing the high temperature.
+            '''), style={'text-align': 'justify'}),
+                html.P(dcc.Markdown('''
+            As a result of external factors, this card shows 
             the wrong temperature value on a sunny day. An **accurate** value can be observed on this 
             **card** even on a **cloudy day or at night**.
             '''), style={'text-align': 'justify'})
+            ])
         ),
         dbc.ModalFooter(dbc.Button("Close",
                                    id="close_temp_info",
@@ -238,8 +249,27 @@ app.layout = html.Div([
     ], id="modal_co2_info",
         centered=True,
         is_open=False,
-        size="lg")
+        size="lg"),
     # Modal co2
+
+    # Tooltip chart
+    dbc.Modal([
+        dbc.ModalBody(
+            html.P(dcc.Markdown('''
+           Some hours of **yesterday's values** are skipped at the end of the day. There is a reason for this: the 
+           thing speak cloud can only read the **last 8000 values** in a day. Therefore, some of yesterday's hours 
+           are missing, while all of **today's hours** are displayed.
+           '''), style={'text-align': 'justify'})
+        ),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_chart_info",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_chart_info",
+        centered=True,
+        is_open=False,
+        size="lg")
+    # Tooltip chart
 
 ])
 
@@ -285,6 +315,18 @@ def toggle_modal(n1, n2, is_open):
     [Input("modal_co2", "n_clicks")],
     [Input("close_co2_info", "n_clicks")],
     [State("modal_co2_info", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal_chart_info", "is_open"),
+    [Input("tooltip_chart", "n_clicks")],
+    [Input("close_chart_info", "n_clicks")],
+    [State("modal_chart_info", "is_open")],
 )
 def toggle_modal(n1, n2, is_open):
     if n1 or n2:
