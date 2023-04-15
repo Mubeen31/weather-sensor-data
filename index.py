@@ -1,6 +1,6 @@
 from dash import html
 from dash import dcc
-from dash.dependencies import Output, Input
+from dash.dependencies import Output, Input, State
 import pandas as pd
 from datetime import datetime
 from app import app
@@ -103,10 +103,34 @@ app.layout = html.Div([
 
     html.Div([
         html.Div([
-            html.Div(id='temp', className='card_bg'),
-            html.Div(id='hum', className='card_bg'),
-            html.Div(id='light_intensity', className='card_bg'),
-            html.Div(id='co2', className='card_bg'),
+            html.Div([
+                html.Div(id='temp', className='card_bg'),
+                html.Img(id='modal_temp',
+                         n_clicks=0,
+                         src='/assets/info.png',
+                         className='info_image'),
+            ], className='card_info_image'),
+            html.Div([
+                html.Div(id='hum', className='card_bg'),
+                html.Img(id='modal_hum',
+                         n_clicks=0,
+                         src='/assets/info.png',
+                         className='info_image'),
+            ], className='card_info_image'),
+            html.Div([
+                html.Div(id='light_intensity', className='card_bg'),
+                html.Img(id='modal_light_intensity',
+                         n_clicks=0,
+                         src='/assets/info.png',
+                         className='info_image'),
+            ], className='card_info_image'),
+            html.Div([
+                html.Div(id='co2', className='card_bg'),
+                html.Img(id='modal_co2',
+                         n_clicks=0,
+                         src='/assets/info.png',
+                         className='info_image'),
+            ], className='card_info_image'),
         ], className='temp_humidity')
     ], className='display_center_row'),
 
@@ -137,9 +161,135 @@ app.layout = html.Div([
         ], className='tabs_container')
     ], className='display_center_row'),
 
-    # html.Div(id='return_tab_content', children=[])
+    # Modal temperature
+    dbc.Modal([
+        dbc.ModalBody(
+            html.P(dcc.Markdown('''
+            As the DHT 22 sensor is inside the plastic container and hanged outside the window, this saves 
+            the sensor from external weather factor but the plastic container acts like a **greenhouse.** 
+            Despite the holes on the bottom side of the plastic container, some heat remains trapped 
+            inside, causing the high temperature. As a result of external factors, this card shows 
+            the wrong temperature value on a sunny day. An **accurate** value can be observed on this 
+            **card** even on a **cloudy day or at night**.
+            '''), style={'text-align': 'justify'})
+        ),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_temp_info",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_temp_info",
+        centered=True,
+        is_open=False,
+        size="lg"),
+    # Modal temperature
+
+    # Modal humidity
+    dbc.Modal([
+        dbc.ModalBody(
+            html.P(dcc.Markdown('''
+            The **humidity** value is also affected by external factors. On a **sunny day**, there is an abrupt 
+            decrease in humidity value. An accurate humidity measurement can also be observed **at night or 
+            on a cloudy day**.
+            '''), style={'text-align': 'justify'})
+        ),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_hum_info",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_hum_info",
+        centered=True,
+        is_open=False,
+        size="lg"),
+    # Modal humidity
+
+    # Modal light intensity
+    dbc.Modal([
+        dbc.ModalBody(
+            html.P(dcc.Markdown('''
+           The light dependent resistor **(LDR)** measures an accurate value on a daytime basis. At night, 
+           **street light or room light** falls on this sensor, causing the small amount of light intensity. 
+           It is also inside the same container and hangs outside the window.
+           '''), style={'text-align': 'justify'})
+        ),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_light_intensity_info",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_light_intensity_info",
+        centered=True,
+        is_open=False,
+        size="lg"),
+    # Modal light intensity
+
+    # Modal co2
+    dbc.Modal([
+        dbc.ModalBody(
+            html.P(dcc.Markdown('''
+           The **MQ 135 gas sensor** is not connected to the microcontroller because I am using a 
+           microcontroller with only one **analog pin**. This card displays only **zero values** as a result. 
+           A microcontroller with **more than one analog pin** is required to measure **CO2 levels** 
+           in the air.
+           '''), style={'text-align': 'justify'})
+        ),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_co2_info",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_co2_info",
+        centered=True,
+        is_open=False,
+        size="lg")
+    # Modal co2
 
 ])
+
+
+@app.callback(
+    Output("modal_temp_info", "is_open"),
+    [Input("modal_temp", "n_clicks")],
+    [Input("close_temp_info", "n_clicks")],
+    [State("modal_temp_info", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal_hum_info", "is_open"),
+    [Input("modal_hum", "n_clicks")],
+    [Input("close_hum_info", "n_clicks")],
+    [State("modal_hum_info", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal_light_intensity_info", "is_open"),
+    [Input("modal_light_intensity", "n_clicks")],
+    [Input("close_light_intensity_info", "n_clicks")],
+    [State("modal_light_intensity_info", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal_co2_info", "is_open"),
+    [Input("modal_co2", "n_clicks")],
+    [Input("close_co2_info", "n_clicks")],
+    [State("modal_co2_info", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 
 @app.callback(Output('data_update_time', 'children'),

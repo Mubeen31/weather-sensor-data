@@ -142,3 +142,18 @@ body {
   margin-bottom: 15px;
   margin-left: 15px;
 }
+
+.info_image {
+  display: flex;
+  flex-direction: row;
+  z-index: 1;
+  position: absolute;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.card_info_image {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
