@@ -164,8 +164,16 @@ app.layout = html.Div([
                         style=tab_style,
                         selected_style=selected_tab_style)
             ], style={'display': 'flex', 'flex-direction': 'row'})
-        ], className='tabs_container')
+        ], className='tabs_container'),
     ], className='display_center_row'),
+
+    html.Div([
+        dbc.Button("Download Data",
+                   id="download_data",
+                   n_clicks=0,
+                   className='text_size',
+                   style={'width': '150px'}),
+    ], className='buttons_row'),
 
     # Modal temperature
     dbc.Modal([
@@ -268,9 +276,59 @@ app.layout = html.Div([
     ], id="modal_chart_info",
         centered=True,
         is_open=False,
-        size="lg")
+        size="lg"),
     # Tooltip chart
 
+    # Modal download data
+    dbc.Modal([
+        dbc.ModalHeader(dbc.ModalTitle("Type file name and select file extension in the below cells."),
+                        close_button=True),
+        dbc.ModalBody([
+            html.Div([
+                html.Div([
+                    html.P('File name', style={'color': 'black'}),
+                    dcc.Input(id='file_name',
+                              placeholder='Type file name',
+                              type='text',
+                              value='Weather data',
+                              style={'margin-top': '-10px', 'color': 'black'})
+                ], className='input_column'),
+                html.Div([
+                    html.P('Select file extension', style={'color': 'black'}),
+                    dcc.Dropdown(id='file_ext',
+                                 options=['.csv', '.xlsx', '.json'],
+                                 clearable=True,
+                                 value='.xlsx',
+                                 placeholder='Select file extension',
+                                 style={'margin-top': '-4px', 'width': '195px', 'color': 'black'})
+                ], className='input_column'),
+            ], className='input_row'),
+
+            dbc.Alert(
+                "This will take few seconds to download",
+                id="alert-auto",
+                is_open=False,
+                duration=10000,
+                className='blink_notification_row'),
+
+            html.Div([
+                dbc.Button('Download Data',
+                           id='download_user_data_button',
+                           n_clicks=0,
+                           className='text_size')
+            ], className='button_row'),
+        ]),
+        dbc.ModalFooter(dbc.Button("Close",
+                                   id="close_download_data",
+                                   className="ms-auto",
+                                   n_clicks=0))
+    ], id="modal_download_data",
+        centered=True,
+        is_open=False,
+        size="xl"),
+    # Modal download data
+
+    dcc.Download(id='download_weather_data')
 ])
 
 
@@ -330,6 +388,53 @@ def toggle_modal(n1, n2, is_open):
 )
 def toggle_modal(n1, n2, is_open):
     if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("modal_download_data", "is_open"),
+    [Input("download_data", "n_clicks")],
+    [Input("close_download_data", "n_clicks")],
+    [State("modal_download_data", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
+
+
+@app.callback(
+    Output("download_weather_data", "data"),
+    Output("file_name", "value"),
+    Output("file_ext", "value"),
+    [Input("download_user_data_button", "n_clicks")],
+    [State("file_name", "value")],
+    [State("file_ext", "value")],
+    prevent_initial_call=True)
+def download_data(n_clicks, file_name, file_ext):
+    url = 'https://api.thingspeak.com/channels/2007583/feeds.csv?days=2'
+    df = pd.read_csv(url)
+    df.rename(columns={'created_at': 'Date Time', 'entry_id': 'Id', 'field1': 'Humidity',
+                       'field2': 'Temperature', 'field3': 'Light Intensity', 'field4': 'CO2 Level'}, inplace=True)
+    df['Date Time'] = pd.to_datetime(df['Date Time'])
+    df['Date Time'] = pd.to_datetime(df['Date Time']).dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    if n_clicks > 0 and file_ext == '.csv':
+        return dcc.send_data_frame(df.to_csv, filename=file_name + file_ext), '', ''
+    elif n_clicks > 0 and file_ext == '.xlsx':
+        return dcc.send_data_frame(df.to_excel, filename=file_name + file_ext), '', ''
+    elif n_clicks > 0 and file_ext == '.json':
+        return dcc.send_data_frame(df.to_json, filename=file_name + file_ext), '', ''
+
+
+@app.callback(
+    Output("alert-auto", "is_open"),
+    [Input("download_user_data_button", "n_clicks")],
+    [State("alert-auto", "is_open")],
+)
+def toggle_alert(n, is_open):
+    if n:
         return not is_open
     return is_open
 
