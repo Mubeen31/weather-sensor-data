@@ -68,10 +68,10 @@ tab_three_chart = html.Div([
             dcc.Graph(id='line_chart3',
                       config={'displayModeBar': False})
         ], className='tab_page'),
-        html.Img(id='tooltip_chart',
-                 n_clicks=0,
-                 src='/assets/tooltip.png',
-                 className='info_image'),
+        html.A(html.Img(id='tooltip_chart',
+                        n_clicks=0,
+                        src='/assets/tooltip.png'),
+               className='info_image'),
     ], className='card_info_image'),
 ], className='tab_content_row')
 tab_four_chart = html.Div([
@@ -111,31 +111,27 @@ app.layout = html.Div([
         html.Div([
             html.Div([
                 html.Div(id='temp', className='card_bg'),
-                html.Img(id='modal_temp',
-                         n_clicks=0,
-                         src='/assets/info.png',
-                         className='info_image'),
+                html.A(html.Img(id='modal_temp',
+                                n_clicks=0,
+                                src='/assets/info.png'), className='info_image')
             ], className='card_info_image'),
             html.Div([
                 html.Div(id='hum', className='card_bg'),
-                html.Img(id='modal_hum',
-                         n_clicks=0,
-                         src='/assets/info.png',
-                         className='info_image'),
+                html.A(html.Img(id='modal_hum',
+                                n_clicks=0,
+                                src='/assets/info.png'), className='info_image')
             ], className='card_info_image'),
             html.Div([
                 html.Div(id='light_intensity', className='card_bg'),
-                html.Img(id='modal_light_intensity',
-                         n_clicks=0,
-                         src='/assets/info.png',
-                         className='info_image'),
+                html.A(html.Img(id='modal_light_intensity',
+                                n_clicks=0,
+                                src='/assets/info.png'), className='info_image')
             ], className='card_info_image'),
             html.Div([
                 html.Div(id='co2', className='card_bg'),
-                html.Img(id='modal_co2',
-                         n_clicks=0,
-                         src='/assets/info.png',
-                         className='info_image'),
+                html.A(html.Img(id='modal_co2',
+                                n_clicks=0,
+                                src='/assets/info.png'), className='info_image')
             ], className='card_info_image'),
         ], className='temp_humidity')
     ], className='display_center_row'),
