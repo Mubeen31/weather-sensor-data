@@ -305,10 +305,10 @@ app.layout = html.Div([
             ], className='input_row'),
 
             dbc.Alert(
-                "This will take few seconds to download",
+                "It will take a few seconds for the data to download.",
                 id="alert-auto",
                 is_open=False,
-                duration=10000,
+                duration=7000,
                 className='blink_notification_row'),
 
             html.Div([
