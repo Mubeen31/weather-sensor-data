@@ -168,12 +168,14 @@ app.layout = html.Div([
     ], className='display_center_row'),
 
     html.Div([
-        dbc.Button("Download Data",
-                   id="download_data",
-                   n_clicks=0,
-                   className='text_size',
-                   style={'width': '150px'}),
-    ], className='buttons_row'),
+        html.Div([
+            dbc.Button("Download Data",
+                       id="download_data",
+                       n_clicks=0,
+                       className='text_size',
+                       style={'width': '150px'}),
+        ], className='download_buttons_row'),
+    ], className='download_buttons_row_center'),
 
     # Modal temperature
     dbc.Modal([
@@ -289,7 +291,7 @@ app.layout = html.Div([
                 There is a limitation on the number of rows that can be downloaded on the **ThingSpeak IoT cloud.** It 
                 is possible to download up to **8000 rows** at a time. 
                 ''', style={'align-text': 'justify'}),
-                       dcc.Markdown('''
+                        dcc.Markdown('''
                        As data is inserted after **15 seconds** on the ThingSpeak cloud server, after each new 
                        download new data will be downloaded. Data from this file can be **combined** with data 
                        from the **previous download.** Data from **multiple days** can be collected by combining **each 

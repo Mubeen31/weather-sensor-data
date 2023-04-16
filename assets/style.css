@@ -162,12 +162,18 @@ body {
   font-size: 15px;
 }
 
-.buttons_row {
+.download_buttons_row {
+  display: flex;
+  flex-direction: row;
+  margin-top: 5px;
+  column-gap: 5px;
+  width: 830px;
+}
+
+.download_buttons_row_center {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 5px;
-  column-gap: 5px;
 }
 
 .input_column {
