@@ -50,7 +50,7 @@ tab_one_chart = html.Div([
             daq.BooleanSwitch(id='last_values',
                               on=True,
                               color="#FF5E5E",
-                              label='Select last values',
+                              label='Select last 15 values',
                               labelPosition='top'
                               )
         ], className='button_row')
