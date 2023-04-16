@@ -308,7 +308,7 @@ app.layout = html.Div([
                 "It will take a few seconds for the data to download.",
                 id="alert-auto",
                 is_open=False,
-                duration=6000,
+                duration=7000,
                 className='blink_notification_row'),
 
             html.Div([
