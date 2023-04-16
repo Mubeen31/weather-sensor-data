@@ -285,6 +285,17 @@ app.layout = html.Div([
                         close_button=True),
         dbc.ModalBody([
             html.Div([
+                html.P([dcc.Markdown('''
+                There is a limitation on the number of rows that can be downloaded on the **ThingSpeak IoT cloud.** It 
+                is possible to download up to **8000 rows** at a time. 
+                ''', style={'align-text': 'justify'}),
+                       dcc.Markdown('''
+                       As data is inserted after **15 seconds** on the ThingSpeak cloud server, after each new 
+                       download new data will be downloaded. Data from this file can be **combined** with data 
+                       from the **previous download.** Data from **multiple days** can be collected by combining **each 
+                       day's downloaded file.**
+                       ''', style={'align-text': 'justify'})
+                        ]),
                 html.Div([
                     html.P('File name', style={'color': 'black'}),
                     dcc.Input(id='file_name',
