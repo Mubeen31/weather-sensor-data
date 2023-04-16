@@ -329,7 +329,7 @@ app.layout = html.Div([
                            id='download_user_data_button',
                            n_clicks=0,
                            className='text_size')
-            ], className='button_row'),
+            ], className='download_data_button_row'),
         ]),
         dbc.ModalFooter(dbc.Button("Close",
                                    id="close_download_data",

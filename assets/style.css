@@ -191,7 +191,7 @@ body {
   row-gap: 5px;
 }
 
-.button_row {
+.download_data_button_row {
   display: flex;
   flex-direction: row;
   justify-content: center;
